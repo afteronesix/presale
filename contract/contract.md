@@ -1,0 +1,2 @@
+✅ X804Token deployed to: 0xc84932efcBeEdbcf5B25F41461DE3F2b7DB8f5Eb
+✅ X804Presale deployed to: 0x76F201E7e27Da0dC2EB2c610Cd224380493bb029
