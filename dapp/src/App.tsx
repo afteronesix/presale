@@ -1,4 +1,4 @@
-import PresaleUI from "./pages/PresaleUI";
+import PresaleUI from "./components/presale/PresaleUI.tsx";
 
 function App() {
   return (
