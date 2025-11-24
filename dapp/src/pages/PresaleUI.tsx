@@ -60,43 +60,47 @@ const PresaleUI = () => {
             X804 Token Presale
           </h1>
           <p className="text-gray-400 mt-2">
-            Secure your early access to the X804 ecosystem.
+            Secure early access to the X804 ecosystem.
           </p>
         </div>
 
-        {/* PRESALE PROGRESS CARD */}
-        <div className="bg-neutral-900/60 p-6 rounded-2xl border border-neutral-700 backdrop-blur-xl shadow-xl mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <Gauge size={20} className="text-blue-400" />
-            <h2 className="text-xl font-semibold">Presale Progress</h2>
-          </div>
+        {/* ABOUT SECTION */}
+        <div className="bg-neutral-900/60 p-6 mb-8 rounded-2xl border border-neutral-700 backdrop-blur-xl shadow-xl">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <Rocket size={18} className="text-pink-400" />
+            About X804
+          </h2>
 
-          {isLoading ? (
-            <p className="text-gray-400">Loading presale data...</p>
-          ) : (
-            <>
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-300">{raisedAmount} ETH Raised</span>
-                <span className="text-gray-300">{cap} ETH Cap</span>
-              </div>
-
-              {/* Progress Bar */}
-              <div className="h-3 w-full bg-neutral-800 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-700"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-
-              <p className="text-right text-xs text-gray-400 mt-1">
-                {progress.toFixed(1)}%
-              </p>
-            </>
-          )}
+          <p className="text-gray-300 leading-relaxed text-sm">
+            <span className="font-semibold text-white">What is X804?</span>
+            <br />
+            <br />
+            X804 is a clone of X402, meaning it is{" "}
+            <span className="font-semibold text-red-400">
+              not an official Coinbase product
+            </span>
+            . Its purpose remains the same: powering an open payments protocol
+            that revives the previously defunct HTTP status code{" "}
+            <span className="font-semibold">402 - “Payment Required”</span> to
+            enable instant, automated crypto payments for APIs, digital content,
+            and web resources.
+            <br />
+            <br />
+            Originally developed by Coinbase, the protocol enables{" "}
+            <span className="text-blue-400 font-semibold">
+              frictionless and account-free payments directly over HTTP
+            </span>
+            , making it especially useful for AI agents performing autonomous
+            payments without intermediaries or complex authentication flows.
+            <br />
+            <br />
+            X804 follows this same vision — delivering a fast and accessible
+            payment layer powered by crypto.
+          </p>
         </div>
 
-        {/* TOKENOMIC CARD */}
-        <div className="bg-neutral-900/60 p-6 rounded-2xl border border-neutral-700 backdrop-blur-xl shadow-xl mb-8">
+        {/* TOKENOMICS */}
+        <div className="bg-neutral-900/60 p-6 mb-8 rounded-2xl border border-neutral-700 backdrop-blur-xl shadow-xl">
           <div className="flex items-center gap-3 mb-4">
             <Coins size={20} className="text-yellow-400" />
             <h2 className="text-xl font-semibold">Tokenomics & Presale Info</h2>
@@ -132,6 +136,37 @@ const PresaleUI = () => {
               </span>
             </p>
           </div>
+        </div>
+
+        {/* PRESALE PROGRESS */}
+        <div className="bg-neutral-900/60 p-6 rounded-2xl mb-8 border border-neutral-700 backdrop-blur-xl shadow-xl">
+          <div className="flex items-center gap-3 mb-4">
+            <Gauge size={20} className="text-blue-400" />
+            <h2 className="text-xl font-semibold">Presale Progress</h2>
+          </div>
+
+          {isLoading ? (
+            <p className="text-gray-400">Loading presale data...</p>
+          ) : (
+            <>
+              <div className="flex justify-between text-sm mb-2">
+                <span className="text-gray-300">{raisedAmount} ETH Raised</span>
+                <span className="text-gray-300">{cap} ETH Cap</span>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="h-3 w-full bg-neutral-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-700"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+
+              <p className="text-right text-xs text-gray-400 mt-1">
+                {progress.toFixed(1)}%
+              </p>
+            </>
+          )}
         </div>
 
         {/* BUY SECTION */}
