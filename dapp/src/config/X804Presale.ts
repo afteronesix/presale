@@ -1,9 +1,9 @@
 // src/config/X804Presale.ts
 
-export const X804_PRESALE_ADDRESS =
+export const X804PresaleAddress =
   "0x76F201E7e27Da0dC2EB2c610Cd224380493bb029" as const;
 
-export const X804_PRESALE_ABI = [
+export const X804PresaleABI = [
   // Read Functions
   {
     type: "function",

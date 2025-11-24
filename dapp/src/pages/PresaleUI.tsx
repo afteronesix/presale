@@ -1,122 +1,200 @@
-import { useState } from "react";
-import { useAccount, useBalance, useWriteContract } from "wagmi";
-import { formatEther, parseEther } from "viem";
-import { X804_PRESALE_ABI, X804_PRESALE_ADDRESS } from "../config/X804Presale";
+import { useState, useMemo } from "react";
+import { useAccount } from "wagmi";
+import { usePresaleData, useBuyTokens } from "../hooks/useContract";
+import {
+  Rocket,
+  Coins,
+  Gauge,
+  Wallet,
+  Clock,
+  TrendingUp,
+  CheckCircle,
+} from "lucide-react";
 
-export default function PresaleUI() {
-  const { address, isConnected } = useAccount();
-  const { data: balance } = useBalance({ address });
+const PresaleUI = () => {
+  const { isConnected } = useAccount();
+  const [ethAmount, setEthAmount] = useState("");
 
-  const [amount, setAmount] = useState<string>("");
+  // READ DATA
+  const {
+    raisedAmount,
+    cap,
+    rate,
+    minPurchase,
+    maxPurchase,
+    userContribution,
+    contractTokenBalance,
+    isLoading,
+  } = usePresaleData();
 
-  const { writeContract, isPending } = useWriteContract();
+  // WRITE TX
+  const {
+    buy,
+    hash,
+    isBuyPending,
+    isBuyInitiated,
+    isConfirming,
+    isConfirmed,
+    error,
+  } = useBuyTokens(ethAmount);
 
-  const handleBuy = () => {
-    if (!amount) return;
-    writeContract({
-      address: X804_PRESALE_ADDRESS,
-      abi: X804_PRESALE_ABI,
-      functionName: "buyTokens",
-      value: parseEther(amount),
-    });
-  };
+  // Calculate progress %
+  const progress = useMemo(() => {
+    const r = parseFloat(raisedAmount || "0");
+    const c = parseFloat(cap || "1");
+    return Math.min((r / c) * 100, 100);
+  }, [raisedAmount, cap]);
+
+  // Estimated X804 tokens
+  const estimatedTokens = useMemo(() => {
+    const eth = parseFloat(ethAmount || "0");
+    return eth > 0 ? (eth * rate).toLocaleString() : "0";
+  }, [ethAmount, rate]);
 
   return (
-    <div className="w-full flex flex-col items-center px-4 py-10 text-white">
-      {/* Container */}
-      <div className="max-w-3xl w-full bg-[#0d0d0f] border border-white/10 rounded-2xl shadow-2xl p-8 space-y-10">
-        {/* Header */}
-        <div className="text-center space-y-3">
-          <h1 className="text-4xl font-bold tracking-wide bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+    <div className="min-h-screen w-full bg-gradient-to-b from-[#0a0a0f] to-[#111] text-white py-10 px-5">
+      <div className="max-w-2xl mx-auto">
+        {/* HEADER */}
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
             X804 Token Presale
           </h1>
-          <p className="text-white/60">
-            Secure your allocation before public launch. Powered by Base Sepolia
-            Testnet.
+          <p className="text-gray-400 mt-2">
+            Secure your early access to the X804 ecosystem.
           </p>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
-          <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-            <p className="text-sm text-white/50">Hard Cap</p>
-            <p className="text-xl font-semibold">200 ETH</p>
+        {/* PRESALE PROGRESS CARD */}
+        <div className="bg-neutral-900/60 p-6 rounded-2xl border border-neutral-700 backdrop-blur-xl shadow-xl mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <Gauge size={20} className="text-blue-400" />
+            <h2 className="text-xl font-semibold">Presale Progress</h2>
           </div>
-          <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-            <p className="text-sm text-white/50">Rate</p>
-            <p className="text-xl font-semibold">1 ETH = 150,000 X804</p>
-          </div>
-          <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-            <p className="text-sm text-white/50">Presale Allocation</p>
-            <p className="text-xl font-semibold">30,000,000 X804</p>
-          </div>
-        </div>
 
-        {/* Buy Box */}
-        <div className="bg-white/5 rounded-xl border border-white/10 p-6 space-y-4">
-          <h2 className="text-2xl font-semibold mb-2">
-            Participate in Presale
-          </h2>
+          {isLoading ? (
+            <p className="text-gray-400">Loading presale data...</p>
+          ) : (
+            <>
+              <div className="flex justify-between text-sm mb-2">
+                <span className="text-gray-300">{raisedAmount} ETH Raised</span>
+                <span className="text-gray-300">{cap} ETH Cap</span>
+              </div>
 
-          <p className="text-sm text-white/50">
-            Minimum Buy: <span className="text-white">0.01 ETH</span> — Maximum
-            Buy: <span className="text-white">1.0 ETH</span>
-          </p>
+              {/* Progress Bar */}
+              <div className="h-3 w-full bg-neutral-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-700"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
 
-          <input
-            type="number"
-            placeholder="Enter ETH amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl bg-black border border-white/20 focus:border-blue-500 outline-none text-white"
-          />
-
-          <button
-            disabled={!isConnected || isPending}
-            onClick={handleBuy}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90 transition-all font-semibold disabled:opacity-40"
-          >
-            {isPending ? "Processing..." : "Buy X804 Tokens"}
-          </button>
-
-          {isConnected && (
-            <p className="text-xs text-white/60 text-center pt-2">
-              Balance: {balance ? formatEther(balance.value) : "0"} ETH
-            </p>
+              <p className="text-right text-xs text-gray-400 mt-1">
+                {progress.toFixed(1)}%
+              </p>
+            </>
           )}
         </div>
 
-        {/* Project Details */}
-        <div className="bg-white/5 rounded-xl border border-white/10 p-6 space-y-4">
-          <h2 className="text-2xl font-semibold">Project Specifications</h2>
+        {/* TOKENOMIC CARD */}
+        <div className="bg-neutral-900/60 p-6 rounded-2xl border border-neutral-700 backdrop-blur-xl shadow-xl mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <Coins size={20} className="text-yellow-400" />
+            <h2 className="text-xl font-semibold">Tokenomics & Presale Info</h2>
+          </div>
 
-          <ul className="space-y-2 text-white/80 text-sm">
-            <li>
-              <b>Token Name:</b> X804 Token
-            </li>
-            <li>
-              <b>Ticker:</b> X804
-            </li>
-            <li>
-              <b>Standard:</b> ERC-20
-            </li>
-            <li>
-              <b>Decimals:</b> 18
-            </li>
-            <li>
-              <b>Total Supply:</b> 100,000,000 X804
-            </li>
-            <li>
-              <b>Network:</b> Base Sepolia (Chain ID: 84532)
-            </li>
-          </ul>
+          <div className="grid grid-cols-1 gap-3 text-gray-300 text-sm">
+            <p className="flex items-center gap-2">
+              <Rocket size={18} className="text-blue-400" />
+              Rate: <span className="font-semibold">{rate} X804 / ETH</span>
+            </p>
+
+            <p className="flex items-center gap-2">
+              <TrendingUp size={18} className="text-green-400" />
+              Min Buy: <span className="font-semibold">{minPurchase} ETH</span>
+            </p>
+
+            <p className="flex items-center gap-2">
+              <TrendingUp size={18} className="text-red-400" />
+              Max Buy: <span className="font-semibold">{maxPurchase} ETH</span>
+            </p>
+
+            <p className="flex items-center gap-2">
+              <Wallet size={18} className="text-purple-400" />
+              Your Contribution:{" "}
+              <span className="font-semibold">{userContribution} ETH</span>
+            </p>
+
+            <p className="flex items-center gap-2">
+              <Clock size={18} className="text-gray-400" />
+              Token Reserve:{" "}
+              <span className="font-semibold">
+                {parseFloat(contractTokenBalance).toLocaleString()} X804
+              </span>
+            </p>
+          </div>
         </div>
 
-        {/* Footer */}
-        <div className="text-center text-white/40 text-sm">
-          Powered by X804 Protocol • Base Sepolia Testnet
+        {/* BUY SECTION */}
+        <div className="bg-neutral-900/60 p-6 rounded-2xl border border-neutral-700 backdrop-blur-xl shadow-xl">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <Coins size={18} className="text-cyan-400" />
+            Buy X804 Tokens
+          </h2>
+
+          <label className="text-sm text-gray-300">Enter ETH Amount</label>
+          <input
+            type="number"
+            placeholder="0.1"
+            value={ethAmount}
+            onChange={(e) => setEthAmount(e.target.value)}
+            className="w-full mt-2 p-3 rounded-xl bg-neutral-800 border border-neutral-700 text-white outline-none focus:border-blue-500"
+          />
+
+          <p className="text-xs text-gray-400 mt-2">
+            You will receive:{" "}
+            <span className="text-blue-400 font-semibold">
+              {estimatedTokens} X804
+            </span>
+          </p>
+
+          <button
+            onClick={() => {
+              if (!isConnected)
+                return alert("Please connect your wallet first.");
+              buy();
+            }}
+            disabled={isBuyPending || isConfirming}
+            className="w-full mt-5 p-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:opacity-90 font-semibold transition disabled:opacity-40"
+          >
+            {isBuyPending || isConfirming ? "Processing..." : "Buy Tokens"}
+          </button>
+
+          {/* TX STATUS */}
+          {isBuyInitiated && (
+            <p className="text-yellow-400 text-sm mt-3">Transaction Sent...</p>
+          )}
+
+          {hash && (
+            <p className="text-blue-400 text-xs mt-2 break-all">
+              Tx Hash: {hash}
+            </p>
+          )}
+
+          {isConfirmed && (
+            <p className="text-green-400 text-sm mt-3 flex items-center gap-1">
+              <CheckCircle size={16} /> Purchase Confirmed!
+            </p>
+          )}
+
+          {error && (
+            <p className="text-red-400 text-sm mt-3">
+              Error: {(error as any)?.message || "Transaction failed"}
+            </p>
+          )}
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default PresaleUI;

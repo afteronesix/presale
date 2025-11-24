@@ -7,45 +7,45 @@ import {
   useWaitForTransactionReceipt,
 } from "wagmi";
 import { parseEther, formatEther } from "viem";
-import { X804_PRESALE_ADDRESS, X804_PRESALE_ABI } from "../config/X804Presale";
+import { X804PresaleAddress, X804PresaleABI } from "../config/X804Presale";
 import { X804_TOKEN_ADDRESS, X804_TOKEN_ABI } from "../config/X804Token";
 
 export const usePresaleData = () => {
   const { address: userAddress } = useAccount();
 
   const { data: raisedAmountRaw } = useReadContract({
-    address: X804_PRESALE_ADDRESS,
-    abi: X804_PRESALE_ABI,
+    address: X804PresaleAddress,
+    abi: X804PresaleABI,
     functionName: "raisedAmount",
   });
 
   const { data: capRaw } = useReadContract({
-    address: X804_PRESALE_ADDRESS,
-    abi: X804_PRESALE_ABI,
+    address: X804PresaleAddress,
+    abi: X804PresaleABI,
     functionName: "CAP",
   });
 
   const { data: rateRaw } = useReadContract({
-    address: X804_PRESALE_ADDRESS,
-    abi: X804_PRESALE_ABI,
+    address: X804PresaleAddress,
+    abi: X804PresaleABI,
     functionName: "RATE",
   });
 
   const { data: minPurchaseRaw } = useReadContract({
-    address: X804_PRESALE_ADDRESS,
-    abi: X804_PRESALE_ABI,
+    address: X804PresaleAddress,
+    abi: X804PresaleABI,
     functionName: "MIN_PURCHASE",
   });
 
   const { data: maxPurchaseRaw } = useReadContract({
-    address: X804_PRESALE_ADDRESS,
-    abi: X804_PRESALE_ABI,
+    address: X804PresaleAddress,
+    abi: X804PresaleABI,
     functionName: "MAX_PURCHASE",
   });
 
   const { data: userContributionRaw } = useReadContract({
-    address: X804_PRESALE_ADDRESS,
-    abi: X804_PRESALE_ABI,
+    address: X804PresaleAddress,
+    abi: X804PresaleABI,
     functionName: "contributions",
     args: [userAddress!],
     query: {
@@ -54,8 +54,8 @@ export const usePresaleData = () => {
   });
 
   const { data: tokenAddress } = useReadContract({
-    address: X804_PRESALE_ADDRESS,
-    abi: X804_PRESALE_ABI,
+    address: X804PresaleAddress,
+    abi: X804PresaleABI,
     functionName: "X804Token",
   });
 
@@ -63,7 +63,7 @@ export const usePresaleData = () => {
     address: X804_TOKEN_ADDRESS,
     abi: X804_TOKEN_ABI,
     functionName: "balanceOf",
-    args: [X804_PRESALE_ADDRESS],
+    args: [X804PresaleAddress],
   });
 
   const raisedAmount = raisedAmountRaw
@@ -116,8 +116,8 @@ export const useBuyTokens = (ethAmountString: string) => {
   const buy = () => {
     if (value && value > 0) {
       writeContract({
-        address: X804_PRESALE_ADDRESS,
-        abi: X804_PRESALE_ABI,
+        address: X804PresaleAddress,
+        abi: X804PresaleABI,
         functionName: "buyTokens",
         value: value,
       });
