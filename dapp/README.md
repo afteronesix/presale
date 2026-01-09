@@ -1,73 +1,103 @@
-# React + TypeScript + Vite
+# 🚀 X804 Presale — Base Sepolia
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and secure **presale dApp** built with a clean UI and fast architecture.  
+This repository contains both the smart contracts and the frontend that powers the **X804 Token Presale**, deployed on **Base Sepolia**.
 
-Currently, two official plugins are available:
+<div align="center">
+  
+![React](https://skillicons.dev/icons?i=react)
+![Vite](https://skillicons.dev/icons?i=vite)
+![Typescript](https://skillicons.dev/icons?i=ts)
+![Tailwind](https://skillicons.dev/icons?i=tailwind)
+![Hardhat](https://skillicons.dev/icons?i=hardhat)
+![Git](https://skillicons.dev/icons?i=git)
+![Ethereum](https://skillicons.dev/icons?i=ethereum)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+</div>
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📦 Project Structure
 
-## Expanding the ESLint configuration
+presale/
+├── contract/ → Hardhat smart contracts (deploy scripts, ABI, tests)
+└── dapp/ → React + Vite + Typescript + Tailwind + Reown + Wagmi UI
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ⚙️ Smart Contracts (Hardhat)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+The smart contracts used for the presale are located here:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+🔗 **Contracts:**  
+https://github.com/afteronesix/presale/tree/main/contract
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+📘 **How to deploy the contracts:**  
+https://github.com/afteronesix/presale/blob/main/contract/readme.md
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Contracts include:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- `X804Token.sol` (ERC-20 token)
+- `X804Presale.sol` (Presale with cap, rate, min/max, etc.)
+- Hardhat deployment scripts for Base Sepolia
+
+---
+
+## 🌐 dApp Frontend (React + Vite)
+
+Frontend source:
+
+🔗 https://github.com/afteronesix/presale/tree/main/dapp
+
+Built with:
+
+- ⚛️ **React**
+- ⚡ **Vite**
+- 🟦 **TypeScript**
+- 🎨 **TailwindCSS**
+- 🔌 **Reown** (wallet connector)
+- 🔗 **Wagmi** (hooks for contract interaction)
+
+The dApp includes:
+
+- Presale progress bar
+- Tokenomics section
+- About section
+- Buy box with automatic token estimation
+- Floating effects & animated gradient borders
+- Mobile-responsive layout
+- Airdrop modal placeholder (coming soon)
+
+---
+
+## ✨ Upcoming Update
+
+🚧 **Airdrop Page**  
+A dedicated airdrop module will be added soon, including:
+
+- Airdrop eligibility check
+- Wallet-based claim logic
+- UI + modal interaction
+- Backend or on-chain verification (TBD)
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.  
+See full license text here:
+
+🔗 https://github.com/afteronesix/presale/blob/main/LICENSE
+
+---
+
+## 🤝 Contributions
+
+Issues, improvements, and pull requests are always welcome!
+
+---
+
+## ⭐ Support
+
+If you like this project, feel free to star the repo!  
+Your support helps grow the open-source ecosystem 🚀
